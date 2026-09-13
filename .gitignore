@@ -7,3 +7,6 @@ test_files/result.txt
 .coverage
 test_files/test_read.txt
 test_files/test_output.txt
+test_files/large_orig.txt
+test_files/large_copy.txt
+test_files/performance_result.txt
