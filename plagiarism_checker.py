@@ -1,123 +1,209 @@
 import jieba
 import math
+import re
 from collections import Counter
+
+
+# 创建全局分词器
+# 避免重复初始化，提高性能
+tokenizer = jieba.Tokenizer()
 
 
 def tokenize(text):
     """
-    中文文本预处理和分词
+    中文文本分词
 
-    :param text: 原始文本
-    :return: 有效词语列表
+    :param text: 输入文本
+    :return: 去除标点后的词列表
     """
 
-    punctuation = "，。！？；：、,.!?;:\"'（）()【】[]"
+    words = tokenizer.lcut(text)
 
-    words = jieba.lcut(text)
+    result = []
 
-    return [
-        word.strip()
-        for word in words
-        if word.strip()
-        and word not in punctuation
-    ]
+    for word in words:
+        word = word.strip()
+
+        # 去除标点符号
+        if word and not re.match(
+            r"^[^\w\u4e00-\u9fa5]+$",
+            word
+        ):
+            result.append(word)
+
+    return result
+
+
+
+def calculate_tf(words):
+    """
+    计算词频 TF
+
+    TF = 当前词出现次数 / 总词数
+    """
+
+    total_words = len(words)
+
+    if total_words == 0:
+        return {}
+
+    counter = Counter(words)
+
+    tf = {}
+
+    for word, count in counter.items():
+        tf[word] = count / total_words
+
+    return tf
+
+
 
 def calculate_idf(documents):
     """
     计算逆文档频率 IDF
 
-    :param documents: 多篇文档的分词结果
-    :return: IDF字典
+    使用平滑公式：
+
+    log((N+1)/(df+1))+1
     """
 
-    total_documents = len(documents)
+    document_count = len(documents)
+
+    word_document_count = Counter()
+
+
+    for document in documents:
+
+        # 一个词在一篇文章只计算一次
+        unique_words = set(document)
+
+        for word in unique_words:
+            word_document_count[word] += 1
+
 
     idf = {}
 
-    all_words = set(
-        word
-        for document in documents
-        for word in document
-    )
-
-    for word in all_words:
-        count = sum(
-            1
-            for document in documents
-            if word in document
-        )
+    for word, count in word_document_count.items():
 
         idf[word] = math.log(
-            (total_documents + 1) / (count + 1)
+            (document_count + 1)
+            /
+            (count + 1)
         ) + 1
+
 
     return idf
 
-def calculate_tfidf(words, idf):
+
+
+def calculate_tfidf(tf, idf):
     """
-    计算TF-IDF向量
+    TF-IDF计算
     """
 
-    tf = calculate_tf(words)
+    tfidf = {}
 
-    return {
-        word: tf[word] * idf[word]
-        for word in tf
-    }
+    for word, value in tf.items():
 
-def calculate_tf(words):
+        tfidf[word] = (
+            value *
+            idf.get(word, 0)
+        )
 
-    total = len(words)
+    return tfidf
 
-    counter = Counter(words)
-
-    return {
-        word: count / total
-        for word, count in counter.items()
-    }
 
 
 def cosine_similarity(vector1, vector2):
+    """
+    计算余弦相似度
+    """
+
+    common_words = (
+        set(vector1.keys())
+        &
+        set(vector2.keys())
+    )
+
 
     numerator = sum(
-        vector1[key] * vector2.get(key, 0)
-        for key in vector1
+        vector1[word] *
+        vector2[word]
+        for word in common_words
     )
+
 
     denominator1 = math.sqrt(
-        sum(value ** 2 for value in vector1.values())
+        sum(
+            value ** 2
+            for value in vector1.values()
+        )
     )
 
+
     denominator2 = math.sqrt(
-        sum(value ** 2 for value in vector2.values())
+        sum(
+            value ** 2
+            for value in vector2.values()
+        )
     )
+
 
     if denominator1 == 0 or denominator2 == 0:
         return 0
 
-    return numerator / (denominator1 * denominator2)
+
+    return numerator / (
+        denominator1 *
+        denominator2
+    )
+
 
 
 def calculate_similarity(text1, text2):
+    """
+    计算论文重复率
+
+    :param text1: 原论文
+    :param text2: 抄袭论文
+    :return: 相似度
+    """
+
 
     words1 = tokenize(text1)
+
     words2 = tokenize(text2)
+
 
     documents = [
         words1,
         words2
     ]
 
-    idf = calculate_idf(documents)
 
-    vector1 = calculate_tfidf(
-        words1,
+    idf = calculate_idf(
+        documents
+    )
+
+
+    tf1 = calculate_tf(words1)
+
+    tf2 = calculate_tf(words2)
+
+
+    tfidf1 = calculate_tfidf(
+        tf1,
         idf
     )
 
-    vector2 = calculate_tfidf(
-        words2,
+
+    tfidf2 = calculate_tfidf(
+        tf2,
         idf
     )
 
-    return cosine_similarity(vector1, vector2)
+
+    return cosine_similarity(
+        tfidf1,
+        tfidf2
+    )
