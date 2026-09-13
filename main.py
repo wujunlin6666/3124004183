@@ -22,18 +22,36 @@ def main():
     copy_path = sys.argv[2]
     answer_path = sys.argv[3]
 
-    original_text = read_file(original_path)
-    copy_text = read_file(copy_path)
+    try:
+        original_text = read_file(original_path)
+        copy_text = read_file(copy_path)
 
-    similarity = calculate_similarity(
-        original_text,
-        copy_text
-    )
+    except FileNotFoundError:
+        print("Error: input file not found")
+        return
 
-    write_result(
-        answer_path,
-        similarity
-    )
+    if not original_text.strip() or not copy_text.strip():
+        print("Error: empty file")
+        return
+
+    try:
+        similarity = calculate_similarity(
+            original_text,
+            copy_text
+        )
+
+    except Exception as e:
+        print(f"Error: calculation failed - {e}")
+        return
+
+    try:
+        write_result(
+            answer_path,
+            similarity
+        )
+
+    except Exception as e:
+        print(f"Error: output failed - {e}")
 
 
 if __name__ == "__main__":
