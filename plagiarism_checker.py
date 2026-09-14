@@ -202,8 +202,31 @@ def calculate_similarity(text1, text2):
         idf
     )
 
-
-    return cosine_similarity(
+    cosine_score = cosine_similarity(
         tfidf1,
         tfidf2
     )
+
+    set1 = set(words1)
+    set2 = set(words2)
+
+    if len(set1 | set2) == 0:
+        return 0
+
+    jaccard_score = len(set1 & set2) / len(set1 | set2)
+
+    if len(set1) == 0:
+        contain_score = 0
+    else:
+        contain_score = len(set1 & set2) / len(set1)
+
+    similarity = (
+            0.2 * cosine_score
+            +
+            0.3 * jaccard_score
+            +
+            0.5 * contain_score
+    )
+
+    return similarity
+

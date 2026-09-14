@@ -2,7 +2,8 @@ import os
 
 from plagiarism_checker import (
     tokenize,
-    calculate_similarity
+    calculate_similarity,
+    calculate_tf
 )
 
 from file_utils import (
@@ -131,3 +132,18 @@ def test_long_text():
     )
 
     assert score > 0
+
+def test_empty_words_tf():
+    from plagiarism_checker import calculate_tf
+
+    result = calculate_tf([])
+
+    assert result == {}
+
+def test_empty_original_text():
+    result = calculate_similarity(
+        "",
+        "这是一个测试文本"
+    )
+
+    assert result >= 0
