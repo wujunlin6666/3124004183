@@ -46,7 +46,7 @@
 
 ### 3.1 模块组织
 
-![项目模块关系图](blog_assets/design_architecture.png)
+![项目模块关系图](https://raw.githubusercontent.com/wujunlin6666/3124004183/master/pair-arithmetic-quiz/blog_assets/design_architecture.png)
 
 | 文件 | 职责 |
 |---|---|
@@ -128,7 +128,7 @@ python scripts/profile_generation.py
 
 使用 cProfile 对生成 10000 道题的完整过程进行分析。实测共调用 2,086,459 次函数，其中 2,001,279 次为原始调用，总耗时 0.509 秒。
 
-![10000 道题性能分析](blog_assets/performance_profile.png)
+![10000 道题性能分析](https://raw.githubusercontent.com/wujunlin6666/3124004183/master/pair-arithmetic-quiz/blog_assets/performance_profile.png)
 
 从累计耗时看，`generate_files()` 为 0.509 秒，生成器的 `generate()` 为 0.404 秒，递归构建表达式树的 `_tree()` 为 0.334 秒，随机产生操作数的 `_number()` 为 0.154 秒。因此主要开销来自随机表达式树的构造、求值和唯一性检查，文件写入不是主要瓶颈。
 
