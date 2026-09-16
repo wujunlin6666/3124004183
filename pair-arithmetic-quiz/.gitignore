@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+Exercises.txt
+Answers.txt
+Grade.txt
+generation.prof
+profile_report.txt
+dist/
+build/
+*.spec
