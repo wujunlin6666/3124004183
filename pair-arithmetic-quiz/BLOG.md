@@ -142,7 +142,9 @@ python scripts/profile_generation.py
 python -m unittest discover -s tests -v
 ```
 
-本机实测结果为 `Ran 18 tests in 0.213s`，全部显示 `OK`。主要测试如下：
+本机截图中的实测结果为 `Ran 18 tests in 0.205s`，全部显示 `OK`。主要测试如下：
+
+![18 项自动测试全部通过](https://raw.githubusercontent.com/wujunlin6666/3124004183/master/pair-arithmetic-quiz/blog_assets/test_results.png)
 
 | 编号 | 测试内容 | 预期结果 | 实际结果 |
 |---:|---|---|---|
