@@ -179,6 +179,8 @@ python main.py -n 10 -r 10
 
 程序在当前目录生成 `Exercises.txt` 和 `Answers.txt`。实测题目中包含自然数、真分数、带分数、括号和四种运算符，并满足运算符数量限制。
 
+![生成十道题并查看题目与答案](https://raw.githubusercontent.com/wujunlin6666/3124004183/master/pair-arithmetic-quiz/blog_assets/generation_result.png)
+
 批改时把第 2、6 题故意改错：
 
 ```powershell
