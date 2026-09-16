@@ -1,6 +1,6 @@
 # 小学四则运算题目生成器
 
-本项目使用 Python 标准库实现，不需要安装第三方依赖。它支持随机生成题目与答案、严格分数运算、交换律去重，以及对答案文件进行批改。
+程序主体仅使用 Python 标准库实现，不需要安装第三方依赖。它支持随机生成题目与答案、严格分数运算、交换律去重，以及对答案文件进行批改。只有生成性能分析图时需要可选的 Matplotlib。
 
 ## 1. 环境
 
@@ -79,7 +79,16 @@ python -m unittest discover -s tests -v
 python scripts/profile_generation.py
 ```
 
-会得到 `generation.prof` 和 `profile_report.txt`。若需要博客中的性能分析图，可安装 SnakeViz：
+会得到 `generation.prof` 和 `profile_report.txt`。
+
+生成项目自带的性能柱状图：
+
+```powershell
+python -m pip install matplotlib
+python scripts/profile_chart.py
+```
+
+图片输出到 `blog_assets/performance_profile.png`。也可以使用 SnakeViz 查看完整调用关系：
 
 ```powershell
 python -m pip install snakeviz
