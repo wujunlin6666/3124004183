@@ -194,6 +194,8 @@ Correct: 8 (1, 3, 4, 5, 7, 8, 9, 10)
 Wrong: 2 (2, 6)
 ```
 
+![答案批改与正确错误题号统计](https://raw.githubusercontent.com/wujunlin6666/3124004183/master/pair-arithmetic-quiz/blog_assets/grading_result.png)
+
 遗漏必填的 `-r` 或只提供 `-e` 时，程序会显示完整帮助信息和明确错误原因，满足参数错误处理要求。
 
 ## 七、项目小结与结对感受
